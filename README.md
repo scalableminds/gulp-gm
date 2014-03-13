@@ -1,6 +1,6 @@
 # [gulp](https://github.com/wearefractal/gulp)-gm [![Build Status](https://drone.io/github.com/scalableminds/gulp-gm/status.png)](https://drone.io/github.com/scalableminds/gulp-gm/latest)
 
-> Image manipulation with [gm](https://github.com/aheckmann/gm). Refer to [gm's documentation]((http://aheckmann.github.io/gm/docs.html)) for details.
+> Image manipulation with [gm](https://github.com/aheckmann/gm). Refer to [gm's documentation](http://aheckmann.github.io/gm/docs.html) for details.
 
 
 # Install
