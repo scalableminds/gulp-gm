@@ -1,0 +1,36 @@
+{
+  "name": "gulp-gm",
+  "version": "0.0.0",
+  "description": "Image manipulation with GraphicsMagick for gulp.",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/scalableminds/gulp-gm.git"
+  },
+  "keywords": [
+    "gulpplugin",
+    "gulpfriendly",
+    "graphicsmagick",
+    "image"
+  ],
+  "author": "Norman Rzepka <norman@scm.io> (http://scm.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scalableminds/gulp-gm/issues"
+  },
+  "homepage": "https://github.com/scalableminds/gulp-gm",
+  "dependencies": {
+    "gm": "^1.14.2",
+    "gulp-util": "^2.2.14",
+    "through2": "^0.4.1"
+  },
+  "devDependencies": {
+    "gulp-mocha": "^0.4.1",
+    "gulp": "^3.5.5",
+    "jshint-stylish": "^0.1.5",
+    "gulp-jshint": "^1.5.0"
+  }
+}
