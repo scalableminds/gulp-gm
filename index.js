@@ -20,6 +20,14 @@ module.exports = function (modifier, options) {
 
 	return through.obj(function (file, enc, done) {
 
+    if (file.isNull()) {
+      return done(null, file);
+    }
+
+    if (file.isStream()) {
+      return done(new gutil.PluginError(PLUGIN_NAME, "Streaming not supported"));
+    }
+
 		var passthrough = through();
 		var gmFile = _gm(file.contents, file.path);
 

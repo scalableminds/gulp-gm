@@ -99,3 +99,15 @@ Default value: `false`
 
 Set to `true` when using ImageMagick instead of GraphicsMagick.
 
+
+## Tests
+
+1. You need both ImageMagick and GraphicsMagick installed on your system to run the tests.
+2. Install all npm dev dependencies `npm install`
+3. Install gulp globally `npm install -g gulp`
+4. Run `gulp test`
+
+
+## License
+
+MIT © [scalable minds](http://scm.io)
