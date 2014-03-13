@@ -43,13 +43,46 @@ var gm = require('gulp-gm');
 
 gulp.task('default', function () {
   gulp.src('test.png')
+
     .pipe(gm(function (gmfile) {
 
       return gmfile.resize(100, 100);
 
     }))
+
     .pipe(gulp.dest('dist'));
 });
+```
+
+### Convert png to jpg
+
+```js
+gulp.src('test.png')
+  .pipe(gm(function (gmfile) {
+
+    return gmfile.setFormat('jpg');
+
+  }))
+  .pipe(gulp.dest('dist'));
+```
+
+### Async manipulation
+
+```js
+gulp.src('test.png')
+  .pipe(gm(function (gmfile, done) {
+
+    gmfile.size(function (err, size) {
+
+      done(null, gmfile
+        .stroke("blue", 6)
+        .fill("transparent")
+        .drawRectangle(0, 0, size.width, size.height));
+
+    });
+
+  }))
+  .pipe(gulp.dest('dist'));
 ```
 
 ## API
@@ -79,11 +112,11 @@ If your call back accepts a second argument (`done`), it will be treated asynchr
 ```js
 gulp.src('test.png')
   .pipe(gm(function (gmfile, done) {
-    gmfile.size(function (err, features) {
+    gmfile.size(function (err, size) {
 
       done(null, gmfile.resize(
-        features.width * 0.5,
-        features.height * 0.5
+        size.width * 0.5,
+        size.height * 0.5
       ));
 
     });
