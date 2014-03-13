@@ -9,12 +9,7 @@ var File   = util.File;
 var gulpGm = require("../index");
 
 
-it('should work', function (done) {
-
-	var stream = gulpGm(function (gmfile) {
-		return gmfile
-			.resize(100, 100);
-	});
+var checkImageSize = function (stream, done) {
 
 	stream.on("data", function(file) {
 
@@ -32,6 +27,18 @@ it('should work', function (done) {
 	});
 
 	stream.write(file);
+
+};
+
+
+it('should work', function (done) {
+
+	var stream = gulpGm(function (gmfile) {
+		return gmfile
+			.resize(100, 100);
+	});
+
+	checkImageSize(stream, done);
 
 });
 
@@ -45,21 +52,37 @@ it('should work with ImageMagick', function (done) {
 		imageMagick : true
 	});
 
-	stream.on("data", function(file) {
+	checkImageSize(stream, done);
 
-		gm(file.contents).size(function (err, features) {
-			assert.equal(features.width, 100);
-			assert.equal(features.height, 91);
-			done();
+});
+
+it('should work async', function (done) {
+
+	var stream = gulpGm(function (gmfile, done) {
+
+		process.nextTick(function () {
+			done(null, gmfile.resize(100, 100));
 		});
 
 	});
 
-	var file = new File({
-		path : "test/fixtures/wikipedia.png",
-		contents : fs.readFileSync("test/fixtures/wikipedia.png")
+	checkImageSize(stream, done);
+
+});
+
+
+it('should work with size checking', function (done) {
+
+	var stream = gulpGm(function (gmfile, done) {
+
+		gmfile.size(function (err, features) {
+			assert.equal(features.width, 500);
+			assert.equal(features.height, 456);
+			done(null, gmfile.resize(100, 100));
+		});
+
 	});
 
-	stream.write(file);
+	checkImageSize(stream, done);
 
 });

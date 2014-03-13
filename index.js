@@ -21,22 +21,31 @@ module.exports = function (modifier, options) {
 	return through.obj(function (file, enc, done) {
 
 		var passthrough = through();
-		var gmFile = _gm(file.pipe(passthrough), file.path);
+		var gmFile = _gm(file.contents, file.path);
 
-		var modifiedGmFile = modifier(gmFile);
 
-		if (modifiedGmFile == null) {
-			return done(new PluginError(PLUGIN_NAME, "Modifier callback didn't return anything."));
-		}
-
-		modifiedGmFile.toBuffer(function (err, buffer) {
+		var finish = function (err, modifiedGmFile) {
 			if (err) {
-				return done(new PluginError(PLUGIN_NAME, err));
+				return done(new PluginError(PLUGIN_NAME, err.toString()));
+			} else if (modifiedGmFile == null) {
+				return done(new PluginError(PLUGIN_NAME, "Modifier callback didn't return anything."));
 			} else {
-				file.contents = buffer;
-				done(null, file);
+				modifiedGmFile.toBuffer(function (err, buffer) {
+					if (err) {
+						return done(new PluginError(PLUGIN_NAME, err));
+					} else {
+						file.contents = buffer;
+						done(null, file);
+					}
+				});
 			}
-		});
+		};
+
+		if (modifier.length === 2) {
+			modifier(gmFile, finish);
+		} else {
+			finish(null, modifier(gmFile));
+		}
 
 	});
 

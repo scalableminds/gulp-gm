@@ -44,8 +44,8 @@ var gm = require('gulp-gm');
 gulp.task('default', function () {
   gulp.src('test.png')
     .pipe(gulp(function (gmfile) {
-    	return gmfile
-    		.resize(100, 100);
+      return gmfile
+        .resize(100, 100);
     }))
     .pipe(gulp.dest('dist'));
 });
@@ -55,16 +55,31 @@ gulp.task('default', function () {
 
 ### gm(modifier, options)
 
-#### modifier
+#### modifier(gmfile, [done])
 
 Type: `Function`
 
-Supply a function that manipulates the image.
+Supply a function that manipulates the image. The first argument will the gm object with all properties. [Read more in the gm documentation](http://aheckmann.github.io/gm/docs.html). If you add a second parameter declaration, your modifier function will be treated asynchronously. Your code will then need to call `done(err, gmfile)`.
+
+```js
+gulp.src('test.png')
+  .pipe(gulp(function (gmfile, done) {
+    gmfile.size(function (err, features) {
+
+      done(null, gmfile.resize(
+        features.width * .5,
+        features.height * .5
+      ));
+
+    });
+  }))
+  .pipe(gulp.dest('dist'));
+```
 
 
 #### options.imageMagick
 
-Type: `Boolean`  
+Type: `Boolean`
 Default value: `false`
 
 Set to `true` when using ImageMagick instead of GraphicsMagick.
