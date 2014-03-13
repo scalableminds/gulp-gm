@@ -9,13 +9,17 @@ var File   = util.File;
 var gulpGm = require("../index");
 
 
-var checkImageSize = function (stream, done) {
+var checkImageSize = function (stream, done, sizes) {
+
+	if (!sizes) {
+		sizes = [ 100, 91 ];
+	}
 
 	stream.on("data", function(file) {
 
 		gm(file.contents).size(function (err, features) {
-			assert.equal(features.width, 100);
-			assert.equal(features.height, 91);
+			assert.equal(features.width, sizes[0]);
+			assert.equal(features.height, sizes[1]);
 			done();
 		});
 
@@ -78,11 +82,13 @@ it('should work with size checking', function (done) {
 		gmfile.size(function (err, features) {
 			assert.equal(features.width, 500);
 			assert.equal(features.height, 456);
-			done(null, gmfile.resize(100, 100));
+			done(null, gmfile.resize(
+				features.width * 0.5,
+				features.height * 0.5));
 		});
 
 	});
 
-	checkImageSize(stream, done);
+	checkImageSize(stream, done, [ 250, 228 ]);
 
 });

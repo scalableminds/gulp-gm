@@ -1,6 +1,6 @@
 # [gulp](https://github.com/wearefractal/gulp)-gm [![Build Status](https://drone.io/github.com/scalableminds/gulp-gm/status.png)](https://drone.io/github.com/scalableminds/gulp-gm/latest)
 
-> Image manipulation with [gm](https://github.com/aheckmann/gm)
+> Image manipulation with [gm](https://github.com/aheckmann/gm). Refer to [gm's documentation]((http://aheckmann.github.io/gm/docs.html)) for details.
 
 
 # Install
@@ -43,9 +43,10 @@ var gm = require('gulp-gm');
 
 gulp.task('default', function () {
   gulp.src('test.png')
-    .pipe(gulp(function (gmfile) {
-      return gmfile
-        .resize(100, 100);
+    .pipe(gm(function (gmfile) {
+
+      return gmfile.resize(100, 100);
+
     }))
     .pipe(gulp.dest('dist'));
 });
@@ -59,16 +60,30 @@ gulp.task('default', function () {
 
 Type: `Function`
 
-Supply a function that manipulates the image. The first argument will the gm object with all properties. [Read more in the gm documentation](http://aheckmann.github.io/gm/docs.html). If you add a second parameter declaration, your modifier function will be treated asynchronously. Your code will then need to call `done(err, gmfile)`.
+Supply a callback that manipulates the image. The first argument will the `gm` object with all original properties. [Read more in the gm documentation](http://aheckmann.github.io/gm/docs.html).
+
+##### Sync
+Make sure to return your modified `gm` object.
 
 ```js
 gulp.src('test.png')
-  .pipe(gulp(function (gmfile, done) {
+  .pipe(gm(function (gmfile) {
+    return gmfile.blur(10);
+  }))
+  .pipe(gulp.dest('dist'));
+```
+
+##### Async
+If your call back accepts a second argument (`done`), it will be treated asynchronously. Your code will then need to call `done(err, gmfile)` at some point.
+
+```js
+gulp.src('test.png')
+  .pipe(gm(function (gmfile, done) {
     gmfile.size(function (err, features) {
 
       done(null, gmfile.resize(
-        features.width * .5,
-        features.height * .5
+        features.width * 0.5,
+        features.height * 0.5
       ));
 
     });
