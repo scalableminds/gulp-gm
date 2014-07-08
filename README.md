@@ -32,7 +32,7 @@ brew install graphicsmagick
 ```
 
 Windows & others:
-- ImageMagick: [ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/windows/](ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/windows/)
+- ImageMagick: [http://www.graphicsmagick.org/download.html](http://www.graphicsmagick.org/download.html)
 
 - GraphicsMagick: [http://www.imagemagick.org/script/binary-releases.php](http://www.imagemagick.org/script/binary-releases.php)
 
