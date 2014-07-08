@@ -32,8 +32,10 @@ brew install graphicsmagick
 ```
 
 Windows & others:
+- ImageMagick: [ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/windows/](ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/windows/)
 
-[http://www.imagemagick.org/script/binary-releases.php](http://www.imagemagick.org/script/binary-releases.php)
+- GraphicsMagick: [http://www.imagemagick.org/script/binary-releases.php](http://www.imagemagick.org/script/binary-releases.php)
+
 
 Confirm that ImageMagick is properly set up by executing `convert -help` in a terminal.
 
