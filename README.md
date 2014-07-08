@@ -32,9 +32,9 @@ brew install graphicsmagick
 ```
 
 Windows & others:
-- ImageMagick: [http://www.graphicsmagick.org/download.html](http://www.graphicsmagick.org/download.html)
+- GraphicsMagick: [http://www.graphicsmagick.org/download.html](http://www.graphicsmagick.org/download.html)
 
-- GraphicsMagick: [http://www.imagemagick.org/script/binary-releases.php](http://www.imagemagick.org/script/binary-releases.php)
+- ImageMagick: [http://www.imagemagick.org/script/binary-releases.php](http://www.imagemagick.org/script/binary-releases.php)
 
 
 Confirm that ImageMagick is properly set up by executing `convert -help` in a terminal.
