@@ -12,6 +12,9 @@ npm install --save-dev gulp-gm
 ```
 
 ### GraphicsMagick or ImageMagick
+`gulp-gm` works best with GraphicsMagick.  
+However, it also supports ImageMagick, but you'll need to set the option `imageMagick: true`.
+
 Make sure GraphicsMagick or ImageMagick is installed on your system and properly set up in your `PATH`.
 
 Ubuntu:
