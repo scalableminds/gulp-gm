@@ -152,6 +152,11 @@ Default value: `false`
 Set to `true` when using ImageMagick instead of GraphicsMagick.
 
 
+## Known Issues
+
+* `gm.thumb(...)` is not supported because it writes to the file system directly. Consider using [gulp-image-resize](https://github.com/scalableminds/gulp-image-resize) instead.
+
+
 ## Tests
 
 1. You need both ImageMagick and GraphicsMagick installed on your system to run the tests.
