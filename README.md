@@ -33,11 +33,9 @@ brew install graphicsmagick
 
 Windows & others:
 - GraphicsMagick: [http://www.graphicsmagick.org/download.html](http://www.graphicsmagick.org/download.html)
-
 - ImageMagick: [http://www.imagemagick.org/script/binary-releases.php](http://www.imagemagick.org/script/binary-releases.php)
 
-
-Confirm that ImageMagick is properly set up by executing `convert -help` in a terminal.
+Confirm that GraphicsMagick or ImageMagick is properly set up by executing `gm -version` or `convert -version` in a terminal.
 
 
 ## Example
@@ -87,6 +85,22 @@ gulp.src('test.png')
     });
 
   }))
+  .pipe(gulp.dest('dist'));
+```
+
+### Using ImageMagick
+
+```js
+gulp.src('test.png')
+
+  .pipe(gm(function (gmfile) {
+
+    return gmfile.resize(100, 100);
+
+  }, {
+    imageMagick: true
+  }))
+
   .pipe(gulp.dest('dist'));
 ```
 
