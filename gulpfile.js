@@ -94,3 +94,5 @@ gulp.task("examples", [
   "example4",
   "example5"
 ]);
+
+gulp.task("default", ["examples", "test"]);

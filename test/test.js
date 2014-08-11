@@ -96,6 +96,38 @@ it('should work with size checking', function (done) {
 
 });
 
+it('should resize with percentage options', function (done) {
+
+  var stream = gulpGm(function (gmfile, done) {
+
+    gmfile.size(function (err, features) {
+      assert.equal(features.width, 500);
+      assert.equal(features.height, 456);
+      done(null, gmfile.resize("50%", "50%"));
+    });
+
+  });
+
+  checkImageSize(stream, done, [ 250, 228 ]);
+
+});
+
+it('should crop with percentage options', function (done) {
+
+  var stream = gulpGm(function (gmfile, done) {
+
+    gmfile.size(function (err, features) {
+      assert.equal(features.width, 500);
+      assert.equal(features.height, 456);
+      done(null, gmfile.crop("50%", "50%", 0, 0));
+    });
+
+  });
+
+  checkImageSize(stream, done, [ 250, 228 ]);
+
+});
+
 it('should convert png to jpg', function (done) {
 
   var stream = gulpGm(function (gmfile) {
