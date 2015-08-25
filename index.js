@@ -19,7 +19,9 @@ var gulpGm = function (modifier, options) {
     _gm = gm.subClass({ imageMagick : true });
   }
 
-  return through.obj(function (file, enc, done) {
+  return through.obj(function (originalFile, enc, done) {
+
+    var file = originalFile.clone({contents: false});
 
     if (file.isNull()) {
       return done(null, file);
