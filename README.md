@@ -1,4 +1,4 @@
-# [gulp](https://github.com/wearefractal/gulp)-gm [![Build Status](https://drone.io/github.com/scalableminds/gulp-gm/status.png)](https://drone.io/github.com/scalableminds/gulp-gm/latest)
+# [gulp](https://github.com/gulpjs/gulp)-gm [![Build Status](https://travis-ci.org/scalableminds/gulp-gm.svg?branch=master)](https://travis-ci.org/scalableminds/gulp-gm)
 
 > Image manipulation with [gm](https://github.com/aheckmann/gm). Refer to [gm's documentation](http://aheckmann.github.io/gm/docs.html) for details.
 
