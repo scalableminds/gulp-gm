@@ -1,4 +1,4 @@
-var gm      = require("gm");
+var gm      = require("gm").subClass({imageMagick: true});;
 var through = require("through2");
 var util    = require("gulp-util");
 var path    = require("path");
