@@ -11,7 +11,96 @@ var gulpGm = function (modifier, options) {
 
   if (!options) {
     options = {};
+  }var gm      = require("gm");
+var through = require("through2");
+var util    = require("gulp-util");
+var path    = require("path");
+
+var PluginError = util.PluginError;
+
+const PLUGIN_NAME = "gulp-gm";
+
+var gulpGm = function (modifier, options) {
+
+  if (!options) {
+    options = {};
   }
+
+  var _gm = gm;
+
+  if (options.imageMagick) {
+    _gm = gm.subClass({ imageMagick : true });
+  }
+
+  return through.obj(function (originalFile, enc, done) {
+
+    var file = originalFile.clone({contents: false});
+
+    if (file.isNull()) {
+      return done(null, file);
+    }
+
+    if (file.isStream()) {
+      return done(new PluginError(PLUGIN_NAME, "Streaming not supported"));
+    }
+
+    var passthrough = through();
+    var gmFile = _gm(file.contents, file.path);
+
+    var finish = function (err, modifiedGmFile) {
+      if (err) {
+        
+        util.log('Error: ' + util.colors.red('✕ ') + util.colors.red(file.path));
+        
+        return done(new PluginError(PLUGIN_NAME, err.toString()));
+      } else if (modifiedGmFile == null) {
+        
+        util.log('Error: ' + util.colors.red('✕ ') + util.colors.red(file.path));
+
+        return done(new PluginError(PLUGIN_NAME, "Modifier callback didn't return anything."));
+      } else {
+        modifiedGmFile.toBuffer(function (err, buffer) {
+          if (err) {
+            
+            util.log('Error: ' + util.colors.red('✕ ') + util.colors.red(file.path));
+            
+            return done(new PluginError(PLUGIN_NAME, err));
+          } else {
+            if (modifiedGmFile._outputFormat) {
+              file.path = file.path.replace(path.extname(file.path), "." + modifiedGmFile._outputFormat);
+            }
+
+            util.log('Processing:', util.colors.green('✔ ') + util.colors.cyan(file.path) );
+
+            file.contents = buffer;
+            done(null, file);
+          }
+        });
+      }
+    };
+
+    if (modifier.length === 2) {
+      modifier(gmFile, finish);
+    } else {
+      finish(null, modifier(gmFile));
+    }
+
+  });
+
+};
+
+gulpGm.imageMagick = function (modifier, options) {
+
+  if (!options) {
+    options = {};
+  }
+  options.imageMagick = true;
+
+  return gulpGm(modifier, options);
+};
+
+module.exports = gulpGm;
+
 
   var _gm = gm;
 
