@@ -1,78 +1,168 @@
-var gm      = require("gm");
+var gm = require("gm");
 var through = require("through2");
-var util    = require("gulp-util");
-var path    = require("path");
+var util = require("gulp-util");
+var path = require("path");
 
 var PluginError = util.PluginError;
 
 const PLUGIN_NAME = "gulp-gm";
 
-var gulpGm = function (modifier, options) {
+var gulpGm = function(modifier, options) {
 
-  if (!options) {
-    options = {};
-  }
+	if (!options) {
+		options = {};
+	}
+	var gm = require("gm");
+	var through = require("through2");
+	var util = require("gulp-util");
+	var path = require("path");
 
-  var _gm = gm;
+	var PluginError = util.PluginError;
 
-  if (options.imageMagick) {
-    _gm = gm.subClass({ imageMagick : true });
-  }
+	const PLUGIN_NAME = "gulp-gm";
 
-  return through.obj(function (originalFile, enc, done) {
+	var gulpGm = function(modifier, options) {
 
-    var file = originalFile.clone({contents: false});
+		if (!options) {
+			options = {};
+		}
 
-    if (file.isNull()) {
-      return done(null, file);
-    }
+		var _gm = gm;
 
-    if (file.isStream()) {
-      return done(new PluginError(PLUGIN_NAME, "Streaming not supported"));
-    }
+		if (options.imageMagick) {
+			_gm = gm.subClass({
+				imageMagick: true
+			});
+		}
 
-    var passthrough = through();
-    var gmFile = _gm(file.contents, file.path);
+		return through.obj(function(originalFile, enc, done) {
+
+			var file = originalFile.clone({
+				contents: false
+			});
+
+			if (file.isNull()) {
+				return done(null, file);
+			}
+
+			if (file.isStream()) {
+				return done(new PluginError(PLUGIN_NAME, "Streaming not supported"));
+			}
+
+			var passthrough = through();
+			var gmFile = _gm(file.contents, file.path);
+
+			var finish = function(err, modifiedGmFile) {
+				if (err) {
+					util.log('ERROR: ' + util.colors.red('✕ ') + util.colors.red(file.path));
+					return done(new PluginError(PLUGIN_NAME, err.toString()));
+				} else if (modifiedGmFile == null) {
+					util.log('ERROR: ' + util.colors.red('✕ ') + util.colors.red(file.path));
+					return done(new PluginError(PLUGIN_NAME, "Modifier callback didn't return anything."));
+				} else {
+					modifiedGmFile.toBuffer(function(err, buffer) {
+						if (err) {
+							util.log('ERROR: ' + util.colors.red('✕ ') + util.colors.red(file.path));
+							return done(new PluginError(PLUGIN_NAME, err));
+						} else {
+							if (modifiedGmFile._outputFormat) {
+								file.path = file.path.replace(path.extname(file.path), "." + modifiedGmFile._outputFormat);
+							}
+							util.log('Processing:', util.colors.green('✔ ') + util.colors.cyan(file.path));
+							file.contents = buffer;
+							done(null, file);
+						}
+					});
+				}
+			};
+
+			if (modifier.length === 2) {
+				modifier(gmFile, finish);
+			} else {
+				finish(null, modifier(gmFile));
+			}
+
+		});
+
+	};
+
+	gulpGm.imageMagick = function(modifier, options) {
+
+		if (!options) {
+			options = {};
+		}
+		options.imageMagick = true;
+
+		return gulpGm(modifier, options);
+	};
+
+	module.exports = gulpGm;
 
 
-    var finish = function (err, modifiedGmFile) {
-      if (err) {
-        return done(new PluginError(PLUGIN_NAME, err.toString()));
-      } else if (modifiedGmFile == null) {
-        return done(new PluginError(PLUGIN_NAME, "Modifier callback didn't return anything."));
-      } else {
-        modifiedGmFile.toBuffer(function (err, buffer) {
-          if (err) {
-            return done(new PluginError(PLUGIN_NAME, err));
-          } else {
-            if (modifiedGmFile._outputFormat) {
-              file.path = file.path.replace(path.extname(file.path), "." + modifiedGmFile._outputFormat);
-            }
-            file.contents = buffer;
-            done(null, file);
-          }
-        });
-      }
-    };
+	var _gm = gm;
 
-    if (modifier.length === 2) {
-      modifier(gmFile, finish);
-    } else {
-      finish(null, modifier(gmFile));
-    }
+	if (options.imageMagick) {
+		_gm = gm.subClass({
+			imageMagick: true
+		});
+	}
 
-  });
+	return through.obj(function(originalFile, enc, done) {
+
+		var file = originalFile.clone({
+			contents: false
+		});
+
+		if (file.isNull()) {
+			return done(null, file);
+		}
+
+		if (file.isStream()) {
+			return done(new PluginError(PLUGIN_NAME, "Streaming not supported"));
+		}
+
+		var passthrough = through();
+		var gmFile = _gm(file.contents, file.path);
+
+
+		var finish = function(err, modifiedGmFile) {
+			if (err) {
+				return done(new PluginError(PLUGIN_NAME, err.toString()));
+			} else if (modifiedGmFile == null) {
+				return done(new PluginError(PLUGIN_NAME, "Modifier callback didn't return anything."));
+			} else {
+				modifiedGmFile.toBuffer(function(err, buffer) {
+					if (err) {
+						return done(new PluginError(PLUGIN_NAME, err));
+					} else {
+						if (modifiedGmFile._outputFormat) {
+							file.path = file.path.replace(path.extname(file.path), "." + modifiedGmFile._outputFormat);
+						}
+						file.contents = buffer;
+						done(null, file);
+					}
+				});
+			}
+		};
+
+		if (modifier.length === 2) {
+			modifier(gmFile, finish);
+		} else {
+			finish(null, modifier(gmFile));
+		}
+
+	});
 
 };
 
-gulpGm.imageMagick = function (modifier, options) {
+gulpGm.imageMagick = function(modifier, options) {
 
-  if (!options) {
-    options = {};
-  }
-  options.imageMagick = true;
+	if (!options) {
+		options = {};
+	}
+	options.imageMagick = true;
 
-  return gulpGm(modifier, options);
+	return gulpGm(modifier, options);
 };
 
 module.exports = gulpGm;
