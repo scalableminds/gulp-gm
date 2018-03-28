@@ -1,6 +1,6 @@
-var gm      = require("gm");
-var through = require("through2");
-var path    = require("path");
+var gm          = require("gm");
+var through     = require("through2");
+var path        = require("path");
 var PluginError = require("plugin-error");
 
 const PLUGIN_NAME = "gulp-gm";
